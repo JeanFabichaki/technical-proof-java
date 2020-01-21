@@ -1,0 +1,45 @@
+import com.sun.tools.javac.Main
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+apply plugin : "java"
+
+ext {
+    javaMainClass = "com.tools.Main"
+}
+
+application {
+    mainClassName = javaMainClass
+}
+
+group 'com.tools'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
+
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+
+    testCompile group: 'junit', name: 'junit-dep', version: '4.10'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '1.9.+'
+
+}
+
+task runWithExec(type: Exec) {
+    dependsOn build
+    group = "Execution"
+    description = "Run the main class with ExecTask"
+    commandLine "java", "-classpath", sourceSets.main.runtimeClasspath.getAsPath(), Main
+}
